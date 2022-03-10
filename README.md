@@ -1,14 +1,8 @@
-# Views in Django
-
-
-In the model view controller (MVC) architecture, the view component deals with how data is presented to users for consumption and viewing. In the Django framework, views are Python functions or classes that receive a web request and return a web response. The response can be a simple HTTP response, an HTML template response, or an HTTP redirect response that redirects a user to another page. Views hold the logic that is required to return information as a response in whatever form to the user. As a matter of best practice, the logic that deals with views is held in the `views.py` file in a Django app.
-
-
-# Apps in Django
+# 🐊 DJANGO : the apps 
 Whenever you create an app, you have to add it in `settings.py` in the INSTALLED_APPS variable.
 
 
-# Database and Migrations 
+# 📅 Database and Migrations 
 
 ## Admin
 To access the admin Page,we first need to :
@@ -28,7 +22,7 @@ mail : kawaremuchan@gmail.com
 pwd : djangoahlem69
 
 
-## Models
+## 🔳 Models
 
 After that, we can go to the file ``models.py`` to any of our apps and start creating the tables.
 
@@ -77,8 +71,9 @@ COMMIT;
 
 > Migrations are useful because it allows to make changes to our database ever after it's created and has data in this database. If this command weren't provided, we would have run some complicated SQL code to update our BD structure and may mess our data structures.
 
-## Accessing our data
+## 📚 Accessing our data
 
+### Creating the tables
 The django interactive shell lets us work with the models interactively line by line.
 
 `$ python manage.py shell`
@@ -124,6 +119,54 @@ Now, we get a more intuitive output :
 >>> Post.objects.all()
 <QuerySet [<Post: Post 1 title -> I found love>, <Post: Post 2 title -> Second post content!>]>
 ```
+
+### Adding data to our tables
+
+We know that our users are the ones creating posts. 
+
+We can access each user's post by calling ``user.post_set.all()`` or more generally, whenever an object has another object (*Aggregation principle in OOP*), we can access its objects by calling :
+
+```python
+object_1.model_set.all()
+```
+From this, we can as well create objects through the user without specifying the user like we did earlier.
+
+```python
+>>> user.post_set.create(title='The war has started!', content='This makes me so sad...')
+<Post: The war has started! -> This makes me so sad...>
+```
+
+### Accessibility to the admin
+
+If we run our local server by going to `http://127.0.0.1:8000/admin/``adress, we will notice that the Post table is not visible.
+
+To do that, we need to modify our `admin.py` file belonging to the blog app folder by adding : 
+
+```python
+from .models import Post
+admin.site.register(Post)
+```
+
+Within the admin page, we can now see the tables related to the Blog app and make all the changes we want.
+
+
+# 👀 Views in Django
+
+
+In the model view controller (MVC) architecture, the view component deals with how data is presented to users for consumption and viewing. In the Django framework, views are Python functions or classes that receive a web request and return a web response. The response can be a simple HTTP response, an HTML template response, or an HTTP redirect response that redirects a user to another page. Views hold the logic that is required to return information as a response in whatever form to the user. As a matter of best practice, the logic that deals with views is held in the `views.py` file in a Django app.
+
+## Formating templates
+
+When it comes to formating date in django, we can refer to [this page](https://docs.djangoproject.com/en/2.0/ref/templates/builtins/#date).
+
+This documentation provides a way to displaying date type in django templating language by using a filter.
+
+``` html
+<small class="text-muted">{{ post.date_posted| date:"F d ,Y" }}</small>
+```
+
+Here, the date will look like : `'March 22, 2022'`.
+
 
 
 
