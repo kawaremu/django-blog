@@ -1,4 +1,5 @@
 .env
 venv/*
-Upskill Django.code-workspace
-__pychache__
+*.code-workspace
+*__pycache__*
+*.pyc
