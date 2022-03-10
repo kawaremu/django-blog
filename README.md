@@ -214,7 +214,7 @@ In our users application, let's go ahead and create a ``template/users`` folder 
 
 We can even make our ``register.html`` extend from other apps templates.
 
-``` html
+```html
 {% extends "blog/base.html" %}
 {% block content %}
 <div class="content-section">
@@ -225,4 +225,6 @@ We can even make our ``register.html`` extend from other apps templates.
     </legend>
   </form>
 </div>
-{% endblock content %}```
+{% endblock content %}
+
+the csrc
