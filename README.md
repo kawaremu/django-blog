@@ -138,7 +138,7 @@ From this, we can as well create objects through the user without specifying the
 
 ### Accessibility to the admin
 
-If we run our local server by going to `http://127.0.0.1:8000/admin/``adress, we will notice that the Post table is not visible.
+If we run our local server by going to `'http://127.0.0.1:8000/admin/'` adress, we will notice that the Post table is not visible.
 
 To do that, we need to modify our `admin.py` file belonging to the blog app folder by adding : 
 
@@ -168,8 +168,61 @@ This documentation provides a way to displaying date type in django templating l
 Here, the date will look like : `'March 22, 2022'`.
 
 
+# 👤 User Registration
 
+## UserCreationForm class
+It is important for our app to handle our users and let them log in or create their own accounts.
 
+We need to create another app that will handle this functionality.
 
+`$python manage.py startapp users`
 
+To create the form view, we can either create them from scratch (which could get complicated pretty fast: hashpasswords, regex for mails,etc...)
 
+Django takes care of this in the backend for us.
+
+Some classes already exist, and they will be converted to HTML.
+
+This is done by add this code to the ``views.py```:
+
+```python
+from django.contrib.auth.forms import UserCreationForm
+
+def register(request):
+  form = UserCreationForm()
+  return render(request,'users/register.html',{'form': form})
+```
+
+## Template form
+
+In our users application, let's go ahead and create a ``template/users`` folder that will contain our ``register.html`` form file.
+
+```
+.users
+├── __init__.py
+├── admin.py
+├── apps.py
+├── migrations
+│   └── __init__.py
+├── models.py
+├── templates
+│   └── users
+│       └── register.html
+├── tests.py
+└── views.py
+```
+
+We can even make our ``register.html`` extend from other apps templates.
+
+``` html
+{% extends "blog/base.html" %}
+{% block content %}
+<div class="content-section">
+  <form method="POST">
+    {% csrf_token %}
+    <legend>
+
+    </legend>
+  </form>
+</div>
+{% endblock content %}```
