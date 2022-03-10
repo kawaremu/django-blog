@@ -8,8 +8,9 @@ In the model view controller (MVC) architecture, the view component deals with h
 Whenever you create an app, you have to add it in `settings.py` in the INSTALLED_APPS variable.
 
 
-# Creating users
+# Database and Migrations 
 
+## Admin
 To access the admin Page,we first need to :
 
 `python manage.py makemigrations` 
@@ -25,6 +26,9 @@ username :kawaremu
 mail : kawaremuchan@gmail.com
 
 pwd : djangoahlem69
+
+
+## Models
 
 After that, we can go to the file ``models.py`` to any of our apps and start creating the tables.
 
@@ -66,3 +70,63 @@ CREATE TABLE "blog_post" (
 CREATE INDEX "blog_post_author_id_dd7a8485" ON "blog_post" ("author_id");
 COMMIT;
 ```
+
+**Don't forget to finalize this by running :**
+
+`$ python manage.py migrate`
+
+> Migrations are useful because it allows to make changes to our database ever after it's created and has data in this database. If this command weren't provided, we would have run some complicated SQL code to update our BD structure and may mess our data structures.
+
+## Accessing our data
+
+The django interactive shell lets us work with the models interactively line by line.
+
+`$ python manage.py shell`
+
+We will get a python shell like the normal we are used to interact with.
+Since we're in the blog application, we would like to select some rows from our tables that belong to blog.models file.
+
+We can then write :
+
+```python
+>>> from blog.models import Post
+>>> from django.contrib.auth.models import User
+>>> User.objects.all()
+```
+
+The ``User.objects.all()`` is equivalent to ``SELECT * FROM auth_user``.
+
+In order to produce a restriction on the select, we can use the method ``filter()`` and save that object to a varibable as follows : 
+
+```python
+>>> user = User.objects.filter(username='kawaremu').first()
+>>> user
+>>> <User: kawaremu>
+>>> post_1 = Post(title='Post 1 title',content='I found love',author=user)
+>>> post_1
+<Post: Post object (None)>
+>>> Post.objects.all()
+<QuerySet []>
+>>> post_1.save()
+>>> Post.objects.all()
+<QuerySet [<Post: Post object (1)>]>
+
+```
+We can as well create posts objects, but we notice that this method returns a "Post" object. It's better to define a dunder ``__str__`` method to print out the object in a more intuitive and explicite manner.
+
+Now, we get a more intuitive output : 
+
+```python
+>>> Post.objects.all()
+<QuerySet [<Post: Post 1 title>]>
+>>> post_2 = Post(title='Post 2 title',content='Second post content!',author_id=user.id)
+>>> post_2.save()
+>>> Post.objects.all()
+<QuerySet [<Post: Post 1 title -> I found love>, <Post: Post 2 title -> Second post content!>]>
+```
+
+
+
+
+
+
